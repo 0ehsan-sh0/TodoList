@@ -3,6 +3,7 @@ using Dapper.Contrib.Extensions;
 using System.Data;
 using TodoList.Database.Interfaces;
 using TodoList.Database.Models;
+using TodoList.RequestHandler.QueryObjects;
 
 namespace TodoList.Database.Repositories
 {
@@ -22,6 +23,7 @@ namespace TodoList.Database.Repositories
                 var result = await connection.QueryAsync<Category>(sql, commandType: CommandType.StoredProcedure);
                 return result.ToList();
             }
+
         }
 
         public async Task<Category?> GetByIdAsync(int id)
@@ -31,6 +33,16 @@ namespace TodoList.Database.Repositories
             {
                 var result = await connection.QueryFirstOrDefaultAsync<Category>(sql, new { id = id }, commandType: CommandType.StoredProcedure);
                 return result;
+            }
+        }
+
+        public async Task<List<Todo>?> GetByIdAsync(int id, QCategoryGetOne query)
+        {
+            string sql = "Category_Get_Todos";
+            using (var connection = _dapperUtility.GetConnection())
+            {
+                var result = await connection.QueryAsync<Todo>(sql, new { id = id }, commandType: CommandType.StoredProcedure);
+                return result.ToList();
             }
         }
 

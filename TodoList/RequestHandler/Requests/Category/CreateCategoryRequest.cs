@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TodoList.RequestHandler.Requests
+namespace TodoList.RequestHandler.Requests.Category
 {
     public class CreateCategoryRequest
     {

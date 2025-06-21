@@ -4,10 +4,10 @@ namespace TodoList.Database.Interfaces
 {
     public interface ITodoRepository
     {
-        //Task<List<Category>> GetAllAsync();
-        //Task<Category?> GetByIdAsync(int id);
+        Task<List<TodoWithCName>> GetAllAsync();
+        Task<TodoWithCName?> GetByIdAsync(int id);
         Task<int> CreateAsync(Todo todo);
-        //Task<Category?> UpdateAsync(Category categoryWithId);
-        //Task<bool> DeleteAsync(int id);
+        Task<TodoWithCName?> UpdateAsync(Todo categoryWithId);
+        Task<bool> DeleteAsync(Todo todo);
     }
 }

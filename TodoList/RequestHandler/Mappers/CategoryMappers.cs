@@ -1,5 +1,5 @@
 ﻿using TodoList.Database.Models;
-using TodoList.RequestHandler.Requests;
+using TodoList.RequestHandler.Requests.Category;
 using TodoList.RequestHandler.Responces.Category;
 
 namespace TodoList.RequestHandler.Mappers

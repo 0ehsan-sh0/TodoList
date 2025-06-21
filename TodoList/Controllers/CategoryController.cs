@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TodoList.Database.Interfaces;
 using TodoList.RequestHandler.Mappers;
-using TodoList.RequestHandler.Requests;
+using TodoList.RequestHandler.QueryObjects;
+using TodoList.RequestHandler.Requests.Category;
 
 namespace TodoList.Controllers
 {
@@ -9,25 +10,35 @@ namespace TodoList.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly ICategoryRepository _repository;
         public CategoryController(ICategoryRepository categoryRepository)
         {
-            _categoryRepository = categoryRepository;
+            _repository = categoryRepository;
         }
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var categories = await _categoryRepository.GetAllAsync();
+            var categories = await _repository.GetAllAsync();
             var rCategories = categories.Select(c => c.ToRCategory()).ToList();
             return Ok(rCategories);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
+        public async Task<IActionResult> GetByIdAsync([FromRoute] int id, [FromQuery] QCategoryGetOne query)
         {
-            var category = await _categoryRepository.GetByIdAsync(id);
-            if (category == null) return NoContent();
-            return Ok(category.ToRCategory());
+            var category = await _repository.GetByIdAsync(id);
+            if (category == null) return NotFound();
+            if (query.todos)
+            {
+                var todos = await _repository.GetByIdAsync(id, query);
+                var rTodos = todos.Select(t => t.ToRTodo()).ToList();
+                return Ok(rTodos);
+            }
+            else
+            {
+
+                return Ok(category.ToRCategory());
+            }
         }
 
         [HttpPost]
@@ -36,7 +47,7 @@ namespace TodoList.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var category = createRequestCategory.ToCategory();
-            int id = await _categoryRepository.CreateAsync(category);
+            int id = await _repository.CreateAsync(category);
 
             return Created($"api/category/{id}", category.ToRCategory());
         }
@@ -47,7 +58,7 @@ namespace TodoList.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var category = await _categoryRepository.UpdateAsync(UCategory.ToCategory(id));
+            var category = await _repository.UpdateAsync(UCategory.ToCategory(id));
             if (category == null) return NotFound();
 
             return Ok(category.ToRCategory());
@@ -59,7 +70,7 @@ namespace TodoList.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var category = await _categoryRepository.DeleteAsync(id);
+            var category = await _repository.DeleteAsync(id);
             if (!category) return NotFound();
 
             return NoContent();
