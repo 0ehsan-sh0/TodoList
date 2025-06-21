@@ -41,7 +41,7 @@ namespace TodoList.Database.Repositories
             using (var connection = _dapperUtility.GetConnection())
             {
                 var Category = await _categoryRepository.GetByIdAsync(todo.category_id);
-                if (Category == null) return 0;
+                if (Category is null) return 0;
                 int result = await connection.InsertAsync<Todo>(todo);
                 return result;
             }
@@ -52,7 +52,7 @@ namespace TodoList.Database.Repositories
             using (var connection = _dapperUtility.GetConnection())
             {
                 var Category = await _categoryRepository.GetByIdAsync(TodoWithId.category_id);
-                if (Category == null) return null;
+                if (Category is null) return null;
                 bool result = await connection.UpdateAsync<Todo>(TodoWithId);
                 if (result) return await GetByIdAsync(TodoWithId.id);
                 return null;

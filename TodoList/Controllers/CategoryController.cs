@@ -6,7 +6,7 @@ using TodoList.RequestHandler.Requests.Category;
 
 namespace TodoList.Controllers
 {
-    [Route("api/category")]
+    [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -27,7 +27,7 @@ namespace TodoList.Controllers
         public async Task<IActionResult> GetByIdAsync([FromRoute] int id, [FromQuery] QCategoryGetOne query)
         {
             var category = await _repository.GetByIdAsync(id);
-            if (category == null) return NotFound();
+            if (category is null) return NotFound();
             if (query.todos)
             {
                 var todos = await _repository.GetByIdAsync(id, query);
@@ -59,7 +59,7 @@ namespace TodoList.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var category = await _repository.UpdateAsync(UCategory.ToCategory(id));
-            if (category == null) return NotFound();
+            if (category is null) return NotFound();
 
             return Ok(category.ToRCategory());
         }

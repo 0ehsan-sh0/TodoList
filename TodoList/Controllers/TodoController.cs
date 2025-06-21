@@ -6,7 +6,7 @@ using TodoList.RequestHandler.Requests.Todo;
 
 namespace TodoList.Controllers
 {
-    [Route("api/todo")]
+    [Route("api/[controller]")]
     [ApiController]
     public class TodoController : ControllerBase
     {
@@ -27,7 +27,7 @@ namespace TodoList.Controllers
         public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
         {
             var todo = await _repository.GetByIdAsync(id);
-            if (todo == null) return NotFound();
+            if (todo is null) return NotFound();
             return Ok(todo.ToRTodo());
         }
 
@@ -50,7 +50,7 @@ namespace TodoList.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var todo = await _repository.UpdateAsync(UTodo.ToTodo(id));
-            if (todo == null) return NotFound();
+            if (todo is null) return NotFound();
 
             return Ok(todo.ToRTodo());
         }
