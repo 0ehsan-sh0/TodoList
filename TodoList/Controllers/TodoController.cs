@@ -8,17 +8,12 @@ namespace TodoList.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TodoController : ControllerBase
+    public class TodoController(ITodoRepository todoRepository) : ControllerBase
     {
-        private readonly ITodoRepository _repository;
-        public TodoController(ITodoRepository todoRepository)
-        {
-            _repository = todoRepository;
-        }
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var todos = await _repository.GetAllAsync();
+            var todos = await todoRepository.GetAllAsync();
             var rTodos = todos.Select(t => t.ToRTodo()).ToList();
             return Ok(rTodos);
         }
@@ -26,7 +21,7 @@ namespace TodoList.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
         {
-            var todo = await _repository.GetByIdAsync(id);
+            var todo = await todoRepository.GetByIdAsync(id);
             if (todo is null) return NotFound();
             return Ok(todo.ToRTodo());
         }
@@ -37,7 +32,7 @@ namespace TodoList.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var todo = CreateTodoRequest.ToTodo();
-            int id = await _repository.CreateAsync(todo);
+            int id = await todoRepository.CreateAsync(todo);
             if (id == 0) return BadRequest("دسته بندی مورد نظر یافت نشد.");
 
             return Created($"api/category/{id}", todo.ToRTodo());
@@ -49,7 +44,7 @@ namespace TodoList.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var todo = await _repository.UpdateAsync(UTodo.ToTodo(id));
+            var todo = await todoRepository.UpdateAsync(UTodo.ToTodo(id));
             if (todo is null) return NotFound();
 
             return Ok(todo.ToRTodo());
@@ -61,7 +56,7 @@ namespace TodoList.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var result = await _repository.DeleteAsync(new Todo { id = id });
+            var result = await todoRepository.DeleteAsync(new Todo { id = id });
             if (!result) return NotFound();
 
             return NoContent();

@@ -2,17 +2,11 @@
 
 namespace TodoList.Database
 {
-    public class DapperUtility
+    public class DapperUtility(IConfiguration configuration)
     {
-        private IConfiguration _configuration;
-        public DapperUtility(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-
         public SqlConnection GetConnection()
         {
-            return new SqlConnection(_configuration.GetConnectionString("Default"));
+            return new SqlConnection(configuration.GetConnectionString("Default"));
         }
     }
 }
