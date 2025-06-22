@@ -43,6 +43,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddSingleton(typeof(TodoList.Database.DapperUtility));
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<JWTService>();
 builder.Services.AddAuthentication(options =>
 {

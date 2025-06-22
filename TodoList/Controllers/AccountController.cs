@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TodoList.Database.Interfaces;
+using TodoList.Database.Models;
 using TodoList.RequestHandler.Requests;
 using TodoList.Services;
 
@@ -7,21 +9,31 @@ namespace TodoList.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountController(JWTService jWTService, IUserRepository userRepository) : ControllerBase
     {
-        private readonly JWTService _jwtService;
-        public AccountController(JWTService jWTService)
-        {
-            _jwtService = jWTService;
-        }
         [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var result = await _jwtService.Authenticate(request);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var result = await jWTService.Authenticate(request);
             if (result is null) return Unauthorized();
 
             return Ok(result);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var result = await userRepository.RegisterAsync(new User { username = request.Username, password = request.Password });
+            if (result is null) return Unauthorized();
+
+            var loginResponce = await jWTService.Authenticate(new LoginRequest { Username = result.username, Password = request.Password });
+            return Ok(loginResponce);
         }
     }
 }
