@@ -17,6 +17,7 @@ namespace TodoList.Controllers
         {
             return User.FindFirstValue(JwtRegisteredClaimNames.Name)!;
         }
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -25,6 +26,7 @@ namespace TodoList.Controllers
             return Ok(rTodos);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
         {
@@ -33,7 +35,7 @@ namespace TodoList.Controllers
             return Ok(todo.ToRTodo());
         }
 
-        [Authorize]
+        [Authorize(Roles = "user")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateTodoRequest CreateTodoRequest)
         {
@@ -46,7 +48,7 @@ namespace TodoList.Controllers
             return Created($"api/category/{id}", todo.ToRTodo());
         }
 
-        [Authorize]
+        [Authorize(Roles = "user")]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateTodoRequest UTodo)
         {
@@ -58,13 +60,13 @@ namespace TodoList.Controllers
             return Ok(todo.ToRTodo());
         }
 
-        [HttpDelete]
-        [Route("{id:int}")]
+        [Authorize(Roles = "user")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var result = await todoRepository.DeleteAsync(new Todo { id = id });
+            var result = await todoRepository.DeleteAsync(new Todo { id = id }, GetUsername());
             if (!result) return NotFound();
 
             return NoContent();

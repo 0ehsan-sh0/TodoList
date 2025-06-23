@@ -8,7 +8,7 @@ namespace TodoList.Services
 {
     public class JWTService(IConfiguration configuration)
     {
-        public LoginResponse Authenticate(string username)
+        public LoginResponse Authenticate(string username, string role)
         {
             var issuer = configuration["JWTConfiguration:Issuer"];
             var audience = configuration["JWTConfiguration:Audience"];
@@ -20,7 +20,8 @@ namespace TodoList.Services
             {
                 Subject = new ClaimsIdentity(
                 [
-                    new Claim(JwtRegisteredClaimNames.Name, username)
+                    new Claim(JwtRegisteredClaimNames.Name, username.Trim()),
+                    new Claim(ClaimTypes.Role, role.Trim())
                 ]),
                 Expires = tokenExpiryTimeStamp,
                 Issuer = issuer,

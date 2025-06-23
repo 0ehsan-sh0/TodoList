@@ -8,6 +8,6 @@ namespace TodoList.Database.Interfaces
         Task<TodoWithCName?> GetByIdAsync(int id);
         Task<int> CreateAsync(Todo todo, string username);
         Task<TodoWithCName?> UpdateAsync(Todo categoryWithId, string username);
-        Task<bool> DeleteAsync(Todo todo);
+        Task<bool> DeleteAsync(Todo todo, string username);
     }
 }

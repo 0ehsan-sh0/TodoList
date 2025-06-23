@@ -17,7 +17,7 @@ namespace TodoList.Controllers
         {
             return User.FindFirstValue(JwtRegisteredClaimNames.Name)!;
         }
-        [Authorize]
+        [Authorize(Roles = "user")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -27,7 +27,7 @@ namespace TodoList.Controllers
             return Ok(rCategories);
         }
 
-        [Authorize]
+        [Authorize(Roles = "user")]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetByIdAsync([FromRoute] int id, [FromQuery] QCategoryGetOne query)
         {
@@ -44,7 +44,7 @@ namespace TodoList.Controllers
                 return Ok(category.ToRCategory());
         }
 
-        [Authorize]
+        [Authorize(Roles = "user")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCategoryRequest createRequestCategory)
         {
@@ -57,7 +57,7 @@ namespace TodoList.Controllers
             return Created($"api/category/{id}", category.ToRCategory());
         }
 
-        [Authorize]
+        [Authorize(Roles = "user")]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCategoryRequest UCategory)
         {
@@ -72,7 +72,7 @@ namespace TodoList.Controllers
             return Ok(category!.ToRCategory());
         }
 
-        [Authorize]
+        [Authorize(Roles = "user")]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {

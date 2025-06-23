@@ -43,8 +43,14 @@ namespace TodoList.Database.Repositories
             return null;
         }
 
-        public async Task<bool> DeleteAsync(Todo todo)
+        public async Task<bool> DeleteAsync(Todo todo, string username)
         {
+            var eTodo = await GetByIdAsync(todo.id);
+            if (eTodo is null) return false;
+
+            var Category = await categoryRepository.GetByIdAsync(eTodo.category_id, username);
+            if (Category is null) return false;
+
             using var connection = dapperUtility.GetConnection();
             bool result = await connection.DeleteAsync<Todo>(todo);
             return result;
