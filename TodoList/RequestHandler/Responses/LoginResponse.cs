@@ -1,6 +1,6 @@
 ﻿namespace TodoList.RequestHandler.Responces
 {
-    public class LoginResponce
+    public class LoginResponse
     {
         public string? Username { get; set; }
         public string? AccessToken { get; set; }

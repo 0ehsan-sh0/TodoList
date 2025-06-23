@@ -2,19 +2,15 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using TodoList.Database.Interfaces;
 using TodoList.RequestHandler.Requests;
 using TodoList.RequestHandler.Responces;
 
 namespace TodoList.Services
 {
-    public class JWTService(IConfiguration configuration, IUserRepository userRepository)
+    public class JWTService(IConfiguration configuration)
     {
-        public async Task<LoginResponce?> Authenticate(LoginRequest request)
+        public LoginResponse Authenticate(LoginRequest request)
         {
-            var user = await userRepository.LoginAsync(request.Username, request.Password);
-            if (user is null) return null;
-
             var issuer = configuration["JWTConfiguration:Issuer"];
             var audience = configuration["JWTConfiguration:Audience"];
             var key = configuration["JWTConfiguration:Key"];
@@ -38,7 +34,7 @@ namespace TodoList.Services
             var securityToken = tokenHandler.CreateToken(tokenDescriptor);
             var accessToken = tokenHandler.WriteToken(securityToken);
 
-            return new LoginResponce
+            return new LoginResponse
             {
                 AccessToken = accessToken,
                 Username = request.Username,
