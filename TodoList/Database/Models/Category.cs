@@ -13,5 +13,6 @@ namespace TodoList.Database.Models
         public string? color { get; set; }
         public DateTime created_at { get; set; } = DateTime.Now;
         public DateTime? deleted_at { get; set; }
+        public string username { get; set; } = string.Empty;
     }
 }

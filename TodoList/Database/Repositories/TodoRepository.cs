@@ -24,19 +24,19 @@ namespace TodoList.Database.Repositories
             return result;
         }
 
-        public async Task<int> CreateAsync(Todo todo)
+        public async Task<int> CreateAsync(Todo todo, string username)
         {
             using var connection = dapperUtility.GetConnection();
-            var Category = await categoryRepository.GetByIdAsync(todo.category_id);
+            var Category = await categoryRepository.GetByIdAsync(todo.category_id, username);
             if (Category is null) return 0;
             int result = await connection.InsertAsync<Todo>(todo);
             return result;
         }
 
-        public async Task<TodoWithCName?> UpdateAsync(Todo TodoWithId)
+        public async Task<TodoWithCName?> UpdateAsync(Todo TodoWithId, string username)
         {
             using var connection = dapperUtility.GetConnection();
-            var Category = await categoryRepository.GetByIdAsync(TodoWithId.category_id);
+            var Category = await categoryRepository.GetByIdAsync(TodoWithId.category_id, username);
             if (Category is null) return null;
             bool result = await connection.UpdateAsync<Todo>(TodoWithId);
             if (result) return await GetByIdAsync(TodoWithId.id);

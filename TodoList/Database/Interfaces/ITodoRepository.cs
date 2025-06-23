@@ -6,8 +6,8 @@ namespace TodoList.Database.Interfaces
     {
         Task<List<TodoWithCName>> GetAllAsync();
         Task<TodoWithCName?> GetByIdAsync(int id);
-        Task<int> CreateAsync(Todo todo);
-        Task<TodoWithCName?> UpdateAsync(Todo categoryWithId);
+        Task<int> CreateAsync(Todo todo, string username);
+        Task<TodoWithCName?> UpdateAsync(Todo categoryWithId, string username);
         Task<bool> DeleteAsync(Todo todo);
     }
 }

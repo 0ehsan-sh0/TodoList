@@ -38,5 +38,17 @@ namespace TodoList.RequestHandler.Mappers
                 color = category.color,
             };
         }
+
+        public static Category ToCategory(this UpdateCategoryRequest category, int id, string username)
+        {
+            return new Category
+            {
+                id = id,
+                name = category.name,
+                description = category.description,
+                color = category.color,
+                username = username
+            };
+        }
     }
 }

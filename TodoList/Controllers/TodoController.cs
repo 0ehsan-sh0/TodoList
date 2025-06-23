@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using TodoList.Database.Interfaces;
 using TodoList.Database.Models;
 using TodoList.RequestHandler.Mappers;
@@ -10,6 +13,10 @@ namespace TodoList.Controllers
     [ApiController]
     public class TodoController(ITodoRepository todoRepository) : ControllerBase
     {
+        private string GetUsername()
+        {
+            return User.FindFirstValue(JwtRegisteredClaimNames.Name)!;
+        }
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -26,25 +33,26 @@ namespace TodoList.Controllers
             return Ok(todo.ToRTodo());
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateTodoRequest CreateTodoRequest)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var todo = CreateTodoRequest.ToTodo();
-            int id = await todoRepository.CreateAsync(todo);
+            int id = await todoRepository.CreateAsync(todo, GetUsername());
             if (id == 0) return BadRequest("دسته بندی مورد نظر یافت نشد.");
 
             return Created($"api/category/{id}", todo.ToRTodo());
         }
 
-        [HttpPut]
-        [Route("{id:int}")]
+        [Authorize]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateTodoRequest UTodo)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var todo = await todoRepository.UpdateAsync(UTodo.ToTodo(id));
+            var todo = await todoRepository.UpdateAsync(UTodo.ToTodo(id), GetUsername());
             if (todo is null) return NotFound();
 
             return Ok(todo.ToRTodo());

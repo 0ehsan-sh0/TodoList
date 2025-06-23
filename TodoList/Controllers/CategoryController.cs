@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using TodoList.Database.Interfaces;
 using TodoList.RequestHandler.Mappers;
 using TodoList.RequestHandler.QueryObjects;
@@ -10,22 +13,30 @@ namespace TodoList.Controllers
     [ApiController]
     public class CategoryController(ICategoryRepository categoryRepository) : ControllerBase
     {
+        private string GetUsername()
+        {
+            return User.FindFirstValue(JwtRegisteredClaimNames.Name)!;
+        }
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var categories = await categoryRepository.GetAllAsync();
+            var categories = await categoryRepository.GetAllAsync(GetUsername());
+
             var rCategories = categories.Select(c => c.ToRCategory()).ToList();
             return Ok(rCategories);
         }
 
+        [Authorize]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetByIdAsync([FromRoute] int id, [FromQuery] QCategoryGetOne query)
         {
-            var category = await categoryRepository.GetByIdAsync(id);
+            var category = await categoryRepository.GetByIdAsync(id, GetUsername());
             if (category is null) return NotFound();
+
             if (query.todos)
             {
-                var todos = await categoryRepository.GetByIdAsync(id, query);
+                var todos = await categoryRepository.GetByIdAsync(id, GetUsername(), query);
                 var rTodos = todos.Select(t => t.ToRTodo()).ToList();
                 return Ok(rTodos);
             }
@@ -33,34 +44,43 @@ namespace TodoList.Controllers
                 return Ok(category.ToRCategory());
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCategoryRequest createRequestCategory)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var category = createRequestCategory.ToCategory();
+            category.username = GetUsername();
             int id = await categoryRepository.CreateAsync(category);
 
             return Created($"api/category/{id}", category.ToRCategory());
         }
 
-        [HttpPut]
-        [Route("{id:int}")]
+        [Authorize]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCategoryRequest UCategory)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var category = await categoryRepository.UpdateAsync(UCategory.ToCategory(id));
-            if (category is null) return NotFound();
+            var existingCategory = await categoryRepository.GetByIdAsync(id, GetUsername());
+            if (existingCategory is null)
+                return NotFound();
 
-            return Ok(category.ToRCategory());
+            var category = await categoryRepository.UpdateAsync(UCategory.ToCategory(id, existingCategory.username));
+
+            return Ok(category!.ToRCategory());
         }
 
-        [HttpDelete]
-        [Route("{id:int}")]
+        [Authorize]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var existingCategory = await categoryRepository.GetByIdAsync(id, GetUsername());
+            if (existingCategory is null)
+                return NotFound();
 
             var category = await categoryRepository.DeleteAsync(id);
             if (!category) return NotFound();
