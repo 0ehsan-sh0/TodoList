@@ -2,14 +2,13 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using TodoList.RequestHandler.Requests;
 using TodoList.RequestHandler.Responces;
 
 namespace TodoList.Services
 {
     public class JWTService(IConfiguration configuration)
     {
-        public LoginResponse Authenticate(LoginRequest request)
+        public LoginResponse Authenticate(string username)
         {
             var issuer = configuration["JWTConfiguration:Issuer"];
             var audience = configuration["JWTConfiguration:Audience"];
@@ -21,7 +20,7 @@ namespace TodoList.Services
             {
                 Subject = new ClaimsIdentity(
                 [
-                    new Claim(JwtRegisteredClaimNames.Name, request.Username)
+                    new Claim(JwtRegisteredClaimNames.Name, username)
                 ]),
                 Expires = tokenExpiryTimeStamp,
                 Issuer = issuer,
@@ -37,7 +36,7 @@ namespace TodoList.Services
             return new LoginResponse
             {
                 AccessToken = accessToken,
-                Username = request.Username,
+                Username = username,
                 ExpiresIn = (int)tokenExpiryTimeStamp.Subtract(DateTime.UtcNow).TotalSeconds
             };
         }
