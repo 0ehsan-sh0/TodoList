@@ -9,11 +9,11 @@ namespace TodoList.Database.Repositories
 {
     public class CategoryRepository(DapperUtility dapperUtility) : ICategoryRepository
     {
-        public async Task<List<Category>> GetAllAsync(string username)
+        public async Task<List<Category>> GetAllAsync(string username, QCategoryGetAll query)
         {
             string sql = "Category_Get_All";
             using var connection = dapperUtility.GetConnection();
-            var result = await connection.QueryAsync<Category>(sql, new { username }, commandType: CommandType.StoredProcedure);
+            var result = await connection.QueryAsync<Category>(sql, new { username, query.PageNumber, query.PageSize }, commandType: CommandType.StoredProcedure);
             return result.ToList();
 
         }
@@ -30,7 +30,15 @@ namespace TodoList.Database.Repositories
         {
             string sql = "Category_Get_Todos";
             using var connection = dapperUtility.GetConnection();
-            var result = await connection.QueryAsync<Todo>(sql, new { id, username }, commandType: CommandType.StoredProcedure);
+            var result = await connection.QueryAsync<Todo>(
+                sql, new
+                {
+                    id,
+                    username,
+                    query.PageNumber,
+                    query.PageSize
+                },
+                commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
 

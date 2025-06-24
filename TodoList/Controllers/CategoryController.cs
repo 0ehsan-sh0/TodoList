@@ -19,9 +19,9 @@ namespace TodoList.Controllers
         }
         [Authorize(Roles = "user")]
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetAllAsync([FromQuery] QCategoryGetAll query)
         {
-            var categories = await categoryRepository.GetAllAsync(GetUsername());
+            var categories = await categoryRepository.GetAllAsync(GetUsername(), query);
 
             var rCategories = categories.Select(c => c.ToRCategory()).ToList();
             return Ok(rCategories);

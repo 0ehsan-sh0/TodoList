@@ -5,7 +5,7 @@ namespace TodoList.Database.Interfaces
 {
     public interface ICategoryRepository
     {
-        Task<List<Category>> GetAllAsync(string username);
+        Task<List<Category>> GetAllAsync(string username, QCategoryGetAll query);
         Task<Category?> GetByIdAsync(int id, string username);
         Task<List<Todo>> GetByIdAsync(int id, string username, QCategoryGetOne query);
         Task<int> CreateAsync(Category category);
