@@ -24,7 +24,7 @@ namespace TodoList.RequestHandler.Mappers
                 title = todo.title,
                 description = todo.description,
                 category_id = todo.category_id,
-
+                is_done = todo.is_done,
             };
         }
 

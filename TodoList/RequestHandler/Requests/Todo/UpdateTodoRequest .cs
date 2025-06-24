@@ -9,5 +9,7 @@ namespace TodoList.RequestHandler.Requests.Todo
         public string? description { get; set; }
         [Required(ErrorMessage = "دسته بندی تسک الزامی است")]
         public int category_id { get; set; }
+        [Required(ErrorMessage = "وضعیت تسک الزامی است")]
+        public bool is_done { get; set; } = false;
     }
 }
