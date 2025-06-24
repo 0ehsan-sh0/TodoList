@@ -10,11 +10,11 @@ namespace TodoList.RequestHandler.Mappers
         {
             return new RCategory
             {
-                id = category.id,
-                name = category.name,
-                description = category.description,
-                color = category.color,
-                created_at = category.created_at,
+                id = category.Id,
+                name = category.Name,
+                description = category.Description,
+                color = category.Color,
+                created_at = category.Created_at,
             };
         }
 
@@ -22,9 +22,9 @@ namespace TodoList.RequestHandler.Mappers
         {
             return new Category
             {
-                name = category.name,
-                description = category.description,
-                color = category.color,
+                Name = category.Name,
+                Description = category.Description,
+                Color = category.Color,
             };
         }
 
@@ -32,10 +32,10 @@ namespace TodoList.RequestHandler.Mappers
         {
             return new Category
             {
-                id = id,
-                name = category.name,
-                description = category.description,
-                color = category.color,
+                Id = id,
+                Name = category.Name,
+                Description = category.Description,
+                Color = category.Color,
             };
         }
 
@@ -43,11 +43,11 @@ namespace TodoList.RequestHandler.Mappers
         {
             return new Category
             {
-                id = id,
-                name = category.name,
-                description = category.description,
-                color = category.color,
-                username = username
+                Id = id,
+                Name = category.Name,
+                Description = category.Description,
+                Color = category.Color,
+                Username = username
             };
         }
     }

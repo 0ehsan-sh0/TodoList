@@ -5,11 +5,11 @@ namespace TodoList.RequestHandler.Requests.Todo
     public class UpdateTodoRequest
     {
         [Required(ErrorMessage = "عنوان تسک الزامی است")]
-        public string title { get; set; } = string.Empty;
-        public string? description { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string? Description { get; set; }
         [Required(ErrorMessage = "دسته بندی تسک الزامی است")]
-        public int category_id { get; set; }
+        public int Category_id { get; set; }
         [Required(ErrorMessage = "وضعیت تسک الزامی است")]
-        public bool is_done { get; set; } = false;
+        public bool Is_done { get; set; } = false;
     }
 }

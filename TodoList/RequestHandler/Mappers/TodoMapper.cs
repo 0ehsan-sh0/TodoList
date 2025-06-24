@@ -10,9 +10,9 @@ namespace TodoList.RequestHandler.Mappers
         {
             return new Todo
             {
-                title = todo.title,
-                description = todo.description,
-                category_id = todo.category_id,
+                Title = todo.Title,
+                Description = todo.Description,
+                Category_id = todo.Category_id,
             };
         }
 
@@ -20,11 +20,11 @@ namespace TodoList.RequestHandler.Mappers
         {
             return new Todo
             {
-                id = id,
-                title = todo.title,
-                description = todo.description,
-                category_id = todo.category_id,
-                is_done = todo.is_done,
+                Id = id,
+                Title = todo.Title,
+                Description = todo.Description,
+                Category_id = todo.Category_id,
+                Is_done = todo.Is_done,
             };
         }
 
@@ -32,11 +32,11 @@ namespace TodoList.RequestHandler.Mappers
         {
             return new RTodo
             {
-                id = todo.id,
-                title = todo.title,
-                description = todo.description,
-                is_done = todo.is_done,
-                category_id = todo.category_id,
+                id = todo.Id,
+                title = todo.Title,
+                description = todo.Description,
+                is_done = todo.Is_done,
+                category_id = todo.Category_id,
 
             };
         }
@@ -45,12 +45,12 @@ namespace TodoList.RequestHandler.Mappers
         {
             return new RTodo
             {
-                id = todo.id,
-                title = todo.title,
-                description = todo.description,
-                is_done = todo.is_done,
-                category_id = todo.category_id,
-                category_name = todo.category_name,
+                id = todo.Id,
+                title = todo.Title,
+                description = todo.Description,
+                is_done = todo.Is_done,
+                category_id = todo.Category_id,
+                category_name = todo.Category_name,
 
             };
         }

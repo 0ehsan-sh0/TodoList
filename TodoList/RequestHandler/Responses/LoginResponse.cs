@@ -1,4 +1,4 @@
-﻿namespace TodoList.RequestHandler.Responces
+﻿namespace TodoList.RequestHandler.Responses
 {
     public class LoginResponse
     {

@@ -28,18 +28,18 @@ namespace TodoList.Database.Repositories
         public async Task<User?> LoginAsync(string username, string password)
         {
             var user = await GetByUsernameAsync(username);
-            if (user is null || !PasswordHasher.VerifyPassword(password, user.password)) return null;
+            if (user is null || !PasswordHasher.VerifyPassword(password, user.Password)) return null;
             return user;
         }
 
         public async Task<User?> RegisterAsync(User user)
         {
-            var databaseUser = await GetByUsernameAsync(user.username);
+            var databaseUser = await GetByUsernameAsync(user.Username);
             if (databaseUser is not null) return null;
             user = new User()
             {
-                username = user.username,
-                password = PasswordHasher.HashPassword(user.password),
+                Username = user.Username,
+                Password = PasswordHasher.HashPassword(user.Password),
             };
             using var connection = dapperUtility.GetConnection();
             var result = await connection.InsertAsync<User>(user);

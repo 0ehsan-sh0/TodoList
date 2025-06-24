@@ -20,7 +20,7 @@ namespace TodoList.Controllers
             var user = await userRepository.LoginAsync(request.Username, request.Password);
             if (user is null) return Unauthorized();
 
-            var result = jWTService.Authenticate(user.username, user.role);
+            var result = jWTService.Authenticate(user.Username, user.Role);
             return Ok(result);
         }
 
@@ -30,10 +30,10 @@ namespace TodoList.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var user = await userRepository.RegisterAsync(new User { username = request.Username, password = request.Password });
+            var user = await userRepository.RegisterAsync(new User { Username = request.Username, Password = request.Password });
             if (user is null) return Unauthorized();
 
-            var loginResponce = jWTService.Authenticate(user.username, user.role);
+            var loginResponce = jWTService.Authenticate(user.Username, user.Role);
             return Ok(loginResponce);
         }
     }

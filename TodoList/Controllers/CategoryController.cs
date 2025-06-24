@@ -34,7 +34,7 @@ namespace TodoList.Controllers
             var category = await categoryRepository.GetByIdAsync(id, GetUsername());
             if (category is null) return NotFound();
 
-            if (query.todos)
+            if (query.Todos)
             {
                 var todos = await categoryRepository.GetByIdAsync(id, GetUsername(), query);
                 var rTodos = todos.Select(t => t.ToRTodo()).ToList();
@@ -51,7 +51,7 @@ namespace TodoList.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var category = createRequestCategory.ToCategory();
-            category.username = GetUsername();
+            category.Username = GetUsername();
             int id = await categoryRepository.CreateAsync(category);
 
             return Created($"api/category/{id}", category.ToRCategory());
@@ -67,7 +67,7 @@ namespace TodoList.Controllers
             if (existingCategory is null)
                 return NotFound();
 
-            var category = await categoryRepository.UpdateAsync(UCategory.ToCategory(id, existingCategory.username));
+            var category = await categoryRepository.UpdateAsync(UCategory.ToCategory(id, existingCategory.Username));
 
             return Ok(category!.ToRCategory());
         }

@@ -6,10 +6,10 @@ namespace TodoList.Database.Models
     public class Todo
     {
         [Key]
-        public int id { get; set; }
-        public string title { get; set; } = string.Empty;
-        public string? description { get; set; }
-        public bool is_done { get; set; } = false;
-        public int category_id { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public bool Is_done { get; set; } = false;
+        public int Category_id { get; set; }
     }
 }

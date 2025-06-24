@@ -27,7 +27,7 @@ namespace TodoList.Database.Repositories
         public async Task<int> CreateAsync(Todo todo, string username)
         {
             using var connection = dapperUtility.GetConnection();
-            var Category = await categoryRepository.GetByIdAsync(todo.category_id, username);
+            var Category = await categoryRepository.GetByIdAsync(todo.Category_id, username);
             if (Category is null) return 0;
             int result = await connection.InsertAsync<Todo>(todo);
             return result;
@@ -36,19 +36,19 @@ namespace TodoList.Database.Repositories
         public async Task<TodoWithCName?> UpdateAsync(Todo TodoWithId, string username)
         {
             using var connection = dapperUtility.GetConnection();
-            var Category = await categoryRepository.GetByIdAsync(TodoWithId.category_id, username);
+            var Category = await categoryRepository.GetByIdAsync(TodoWithId.Category_id, username);
             if (Category is null) return null;
             bool result = await connection.UpdateAsync<Todo>(TodoWithId);
-            if (result) return await GetByIdAsync(TodoWithId.id);
+            if (result) return await GetByIdAsync(TodoWithId.Id);
             return null;
         }
 
         public async Task<bool> DeleteAsync(Todo todo, string username)
         {
-            var eTodo = await GetByIdAsync(todo.id);
+            var eTodo = await GetByIdAsync(todo.Id);
             if (eTodo is null) return false;
 
-            var Category = await categoryRepository.GetByIdAsync(eTodo.category_id, username);
+            var Category = await categoryRepository.GetByIdAsync(eTodo.Category_id, username);
             if (Category is null) return false;
 
             using var connection = dapperUtility.GetConnection();

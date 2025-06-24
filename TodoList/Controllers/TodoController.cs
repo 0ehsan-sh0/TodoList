@@ -66,7 +66,7 @@ namespace TodoList.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var result = await todoRepository.DeleteAsync(new Todo { id = id }, GetUsername());
+            var result = await todoRepository.DeleteAsync(new Todo { Id = id }, GetUsername());
             if (!result) return NotFound();
 
             return NoContent();

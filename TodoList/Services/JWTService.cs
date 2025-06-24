@@ -2,7 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using TodoList.RequestHandler.Responces;
+using TodoList.RequestHandler.Responses;
 
 namespace TodoList.Services
 {

@@ -7,12 +7,12 @@ namespace TodoList.Database.Models
     public class Category
     {
         [Key]
-        public int id { get; set; }
-        public string name { get; set; } = string.Empty;
-        public string? description { get; set; }
-        public string? color { get; set; }
-        public DateTime created_at { get; set; } = DateTime.Now;
-        public DateTime? deleted_at { get; set; }
-        public string username { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public string? Color { get; set; }
+        public DateTime Created_at { get; set; } = DateTime.Now;
+        public DateTime? Deleted_at { get; set; }
+        public string Username { get; set; } = string.Empty;
     }
 }
