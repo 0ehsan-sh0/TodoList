@@ -1,14 +1,41 @@
+@if (isLoggedIn) {
+<button class="btn w-full sm:w-60 btn-lg btn-primary mb-5" (click)="openDialog('createCategory')">
+  <i-lucide [img]="Plus" class="my-icon"></i-lucide>
+  افزودن دسته بندی
+</button>
 <div class="flex space-x-4  mb-5">
-    <input type="text" class="input input-lg flex-8" placeholder="جستجو دسته بندی ..." />
-    <button class="btn btn-lg btn-primary flex-1">جستجو</button>
+  <input type="text" class="input input-lg flex-8" placeholder="جستجو دسته بندی ..." />
+  <button class="btn btn-lg btn-accent flex-1">جستجو</button>
 </div>
 
-<div class="card w-full bg-base-100 card-sm shadow-sm border-2">
-  <div class="card-body">
-    <h2 class="card-title flex-1">دسته بندی</h2>
-    <p>توضیحات دسته بندی</p>
-    <div class="justify-end card-actions">
-      <button class="btn btn-secondary">مشاهده</button>
+<section class="flex flex-wrap gap-4">
+  @for (category of categories; track category.id) {
+  <div style="border-color: {{category.color}};"
+      [ngClass]="{
+        'border-2': category.color,
+        'border-transparent': !category.color
+      }"
+    class=" card w-full sm:w-[calc(50%-0.5rem)] md:w-[calc(33.3333%-1rem)] lg:w-[calc(25%-1rem)] bg-base-300 card-sm border-2 shadow-sm mb-3">
+    <div class="card-body">
+      <h2 class="card-title flex-1">{{category.name}}</h2>
+      <p>{{category.description}}</p>
+      <div class="justify-end card-actions">
+        <button class="btn btn-secondary">مشاهده</button>
+      </div>
     </div>
   </div>
+  }@empty {
+  <div class="text-center w-full text-gray-500 mt-6">
+    هیچ دسته‌بندی‌ای وجود ندارد.
+  </div>
+  }
+</section>
+
+<app-modal #createCategory id="createCategory">
+  <app-create-category (created)="closeDialog()"></app-create-category>
+</app-modal>
+} @else {
+<div class="text-center w-full text-gray-500 mt-6">
+  برای مشاهده دسته بندی وظایف خود وارد شوید.
 </div>
+}

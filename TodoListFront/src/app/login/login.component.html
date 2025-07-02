@@ -1,0 +1,38 @@
+<h3 class="text-lg font-bold mb-3">ورود</h3>
+
+<form action="" #form="ngForm" (ngSubmit)="onSubmit(form)">
+    <div class="space-y-2 mb-3">
+        <label class="label">نام کاربری :</label>
+        <input 
+        type="text" 
+        class="input sm:input-lg w-full" 
+        placeholder="نام کاربری" 
+        name="username"
+        ngModel
+        required
+        #username="ngModel"
+        [class.input-error]="username.invalid && username.touched"
+        />
+    </div>
+    <div class="space-y-2 mb-5">
+        <label class="label">رمز عبور :</label>
+        <input 
+        type="password" 
+        class="input sm:input-lg w-full" 
+        placeholder="رمز عبور" 
+        minlength="8"
+        name="password"
+        ngModel
+        required
+        #password="ngModel"
+        [class.input-error]="password.invalid && password.touched"
+        />
+    </div>
+    @if (errorMessage.length > 0) {
+        <p class="text-error mb-3">
+        {{ errorMessage }}
+        </p>
+    }
+
+    <button type="submit" [disabled]="form.invalid" class="btn btn-primary btn-lg w-full">ورود</button>
+</form>

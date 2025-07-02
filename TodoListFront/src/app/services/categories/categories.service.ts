@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Category } from '../../models/category.model';
+import { Category, CategoryCreateRequest } from '../../models/category.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +14,24 @@ export class CategoriesService {
   categories = new BehaviorSubject<Category[]>([]);
 
   getCategories() {
-    this.http.get<Category[]>(this.apiUrl).subscribe((categories) => {
-      this.categories.next([...categories]);
+    this.http.get<Category[]>(this.apiUrl).subscribe({
+      next: (categories) => {
+        this.categories.next([...categories]);
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
+
+  Create(data: CategoryCreateRequest) {
+    return this.http.post<Category>(`${this.apiUrl}`, data).subscribe({
+      next: (category) => {
+        this.categories.next([category,...this.categories.value]);
+      },
+      error: (err) => {
+        console.log(err);
+      }
     });
   }
 }
