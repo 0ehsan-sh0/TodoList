@@ -16,8 +16,9 @@ A simple full-stack Todo List application with authentication and category manag
 
 ### Backend:
 - [ASP.NET Core 8](https://learn.microsoft.com/en-us/aspnet/core/)
+- [Dapper](https://dappertutorial.net/)
 - [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/)
-- SQLite or SQL Server
+- SQL Server
 - JWT (JSON Web Tokens) for authentication
 
 ---
@@ -38,11 +39,9 @@ A simple full-stack Todo List application with authentication and category manag
    dotnet restore
    ```
 
-3. Run database migrations:
+3. Run database:
 
-   ```bash
-   dotnet ef database update
-   ```
+   You have to restore backup (TodoList.bak) on the SQL Server or you have to implement Store Procedures by your own.
 
 4. Start the API:
 
