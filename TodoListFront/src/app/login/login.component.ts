@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from '../services/auth/auth.service';
 import { AuthStateService } from '../services/auth/auth-state.service';
+import { AlertService } from '../uiService/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,8 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService,
-    private authState: AuthStateService
+    private authState: AuthStateService,
+    private alertService: AlertService
   ) {}
 
   onSubmit(formData: NgForm) {
@@ -28,6 +30,7 @@ export class LoginComponent {
           this.authState.login(res.accessToken);
           formData.reset();
           this.loggedIn.emit();
+          this.alertService.show('ورود موفقیت آمیز بود.');
         }
       },
       error: (err) => {
