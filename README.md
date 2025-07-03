@@ -1,6 +1,7 @@
 # 📝 TodoList
 
 A simple full-stack Todo List application with authentication and category management — built using **Angular** and **ASP.NET Core Web API**.
+The project language is persian so consider to change error messages,form models etc.
 
 > ⚠️ **Note:** This project is under development and not yet feature-complete.
 
@@ -11,13 +12,13 @@ A simple full-stack Todo List application with authentication and category manag
 ### Frontend:
 - [Angular 17+](https://angular.io/)
 - [TailwindCSS](https://tailwindcss.com/)
+- [DaisyUI](https://daisyui.com/)
 - [RxJS](https://rxjs.dev/)
 - [NgModel Forms](https://angular.io/guide/forms-overview)
 
 ### Backend:
 - [ASP.NET Core 8](https://learn.microsoft.com/en-us/aspnet/core/)
 - [Dapper](https://dappertutorial.net/)
-- [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/)
 - SQL Server
 - JWT (JSON Web Tokens) for authentication
 
