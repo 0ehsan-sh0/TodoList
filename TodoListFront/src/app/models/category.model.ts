@@ -12,3 +12,9 @@ export interface CategoryCreateRequest {
   description?: string;
   color?: string;
 }
+
+export interface CategoryUpdateRequest {
+  name?: string;
+  description?: string;
+  color?: string;
+}
