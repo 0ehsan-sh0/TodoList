@@ -10,6 +10,7 @@
         name="name"
         [(ngModel)]="category.name"
         required
+        maxlength="100"
         #name="ngModel"
         [class.input-error]="name.invalid && name.touched"
         />

@@ -3,6 +3,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from '../services/auth/auth.service';
 import { AuthResponse } from '../models/auth-response.model';
 import { AuthStateService } from '../services/auth/auth-state.service';
+import { AlertService } from '../uiService/alert.service';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +17,8 @@ export class RegisterComponent {
   @Output() registered = new EventEmitter<void>();
   constructor(
     private authService: AuthService,
-    private authState: AuthStateService
+    private authState: AuthStateService,
+    private alertService: AlertService
   ) {}
 
   onSubmit(formData: NgForm) {
@@ -28,6 +30,7 @@ export class RegisterComponent {
           if (res.accessToken) {
             this.authState.login(res.accessToken);
             this.registered.emit();
+            this.alertService.show('ثبت نام موفقیت آمیز بود.');
           }
         },
         error: (err) => {

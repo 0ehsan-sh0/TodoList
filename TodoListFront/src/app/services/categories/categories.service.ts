@@ -1,7 +1,12 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Category, CategoryCreateRequest } from '../../models/category.model';
+import { AlertService } from '../../uiService/alert.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +14,7 @@ import { Category, CategoryCreateRequest } from '../../models/category.model';
 export class CategoriesService {
   private readonly apiUrl = 'https://localhost:7157/api/category';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private alertService: AlertService) {}
 
   categories = new BehaviorSubject<Category[]>([]);
   category = new BehaviorSubject<Category>({} as Category);
@@ -20,7 +25,7 @@ export class CategoriesService {
         this.categories.next([...categories]);
       },
       error: (err) => {
-        console.log(err);
+        this.handleError(err);
       },
     });
   }
@@ -32,7 +37,7 @@ export class CategoriesService {
         this.category.next(category);
       },
       error: (err) => {
-        console.log(err);
+        this.handleError(err);
       },
     });
   }
@@ -41,9 +46,10 @@ export class CategoriesService {
     return this.http.post<Category>(`${this.apiUrl}`, data).subscribe({
       next: (category) => {
         this.categories.next([category, ...this.categories.value]);
+        this.alertService.show('دسته بندی اضافه شد', 'success');
       },
       error: (err) => {
-        console.log(err);
+        this.handleError(err);
       },
     });
   }
@@ -59,9 +65,10 @@ export class CategoriesService {
             return c;
           })
         );
+        this.alertService.show('دسته بندی به روز شد', 'success');
       },
       error: (err) => {
-        console.log(err);
+        this.handleError(err);
       },
     });
   }
@@ -74,10 +81,41 @@ export class CategoriesService {
             return c.id !== id;
           })
         );
+        this.alertService.show('دسته بندی حذف شد', 'success');
       },
       error: (err) => {
-        console.log(err);
+        this.handleError(err);
       },
     });
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    switch (error.status) {
+      case 401:
+        this.alertService.show('لطفا وارد حساب خود شوید', 'error');
+        break;
+      case 404:
+        this.alertService.show('دسته بندی یافت نشد', 'error');
+        break;
+      case 400:
+        const errors = error?.error?.errors;
+        if (errors && typeof errors === 'object') {
+          const messages = Object.values(errors).flat(); // flattens all arrays into one
+          if (messages.length) {
+            this.alertService.show(messages[0] as string, 'error'); // show first error
+          } else {
+            this.alertService.show('لطفا اطلاعات صحیح وارد کنید', 'error');
+          }
+        } else {
+          this.alertService.show('لطفا اطلاعات صحیح وارد کنید', 'error');
+        }
+        break;
+      default:
+        this.alertService.show(
+          'مشکلی پیش آمد. لطفاً دوباره تلاش کنید.',
+          'error'
+        );
+        break;
+    }
   }
 }
